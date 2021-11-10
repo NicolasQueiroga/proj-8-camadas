@@ -15,8 +15,7 @@ fp = 14e3
 sd.default.samplerate = samplerate
 sd.default.channels = 1
 
-y_audio = audio[:, 1]
-samples = len(y_audio)
+samples = len(audio)
 t = np.linspace(0, samples/samplerate, samples)
 portadora = np.cos(2*np.pi*fp*t)
 
@@ -30,5 +29,13 @@ plt.title('Sinal Demodulado')
 
 s.plotFFT(demodulado, title='FFT Demodulado')
 
-sd.play(demodulado)
+filtrado = s.filtro(demodulado, samplerate, 4000)
+
+max_val = max(filtrado)
+norm_audio = [s/max_val for s in filtrado]
+
+sd.play(norm_audio, fs)
 sd.wait()
+
+
+plt.show()

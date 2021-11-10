@@ -43,8 +43,8 @@ sd.play(filtrado)
 sd.wait()
 
 # x, portadora = s.generateSin(fp, 1, T, samplerate)
-sinal = portadora[:-1]
-modulado = abs(1 + filtrado)*sinal
+sinal = portadora[:len(filtrado)]
+modulado = (1+filtrado)*sinal
 
 plt.figure('Sinal Modulado')
 plt.plot(t, modulado)
