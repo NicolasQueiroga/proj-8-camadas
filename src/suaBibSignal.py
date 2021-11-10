@@ -41,8 +41,8 @@ class Signal:
                 count += 1
                 print(' ', end='')
 
-    def generateSin(self, freq, amplitude, time):
-        n = self.fs*time
+    def generateSin(self, freq, amplitude, time, samplerate):
+        n = samplerate*time
         x = np.linspace(0, time, n)
         s = amplitude*np.sin(freq*x*2*np.pi)
         return (x, s)
@@ -55,9 +55,9 @@ class Signal:
         yf = fft(signal*W)
         return(xf, np.abs(yf[0:N//2]))
 
-    def plotFFT(self, signal):
+    def plotFFT(self, signal, title=''):
         x, y = self.calcFFT(signal)
-        plt.figure('Transformada de Fourier do sinal resultante "G"')
+        plt.figure(title)
         plt.plot(x, np.abs(y), 'r')
         plt.title('Transformada de Fourier do sinal resultante "G"')
         plt.xlabel('Frequência [Hz]')
@@ -67,16 +67,16 @@ class Signal:
     def filtro(self, y, samplerate, cutoff_hz):
         nyq_rate = samplerate/2
         width = 5.0/nyq_rate
-        ripple_db = 60.0 #dB
-        N , beta = window.kaiserord(ripple_db, width)
+        ripple_db = 60.0  # dB
+        N, beta = window.kaiserord(ripple_db, width)
         taps = window.firwin(N, cutoff_hz/nyq_rate, window=('kaiser', beta))
         yFiltrado = window.lfilter(taps, 1.0, y)
         return yFiltrado
 
     def LPF(self, signal, cutoff_hz, fs):
-            nyq_rate = fs/2
-            width = 5.0/nyq_rate
-            ripple_db = 60.0 #dB
-            N , beta = window.kaiserord(ripple_db, width)
-            taps = window.firwin(N, cutoff_hz/nyq_rate, window=('kaiser', beta))
-            return( window.lfilter(taps, 1.0, signal))
+        nyq_rate = fs/2
+        width = 5.0/nyq_rate
+        ripple_db = 60.0  # dB
+        N, beta = window.kaiserord(ripple_db, width)
+        taps = window.firwin(N, cutoff_hz/nyq_rate, window=('kaiser', beta))
+        return(window.lfilter(taps, 1.0, signal))
