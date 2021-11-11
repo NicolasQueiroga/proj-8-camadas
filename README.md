@@ -1,1 +1,5 @@
-# proj-8-camadas
+# Modulação AM
+
+#### Dupla:
+- Francisco Janela
+- Nicolas Queiroga
