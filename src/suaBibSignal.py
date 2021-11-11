@@ -1,6 +1,4 @@
-
 import numpy as np
-import sounddevice as sd
 import matplotlib.pyplot as plt
 from scipy.fftpack import fft
 from scipy import signal as window
@@ -8,18 +6,14 @@ from scipy import signal as window
 
 class Signal:
     def __init__(self):
-        self.init = 0
-        self.DTMF = {
-            '1': (679, 1209), '2': (679, 1336), '3': (679, 1477), 'A': (679, 1633),
-            '4': (770, 1209), '5': (770, 1336), '6': (770, 1477), 'B': (770, 1633),
-            '7': (852, 1209), '8': (852, 1336), '9': (852, 1477), 'C': (852, 1633),
-            'X': (941, 1209), '0': (941, 1336), '#': (941, 1477), 'D': (941, 1633)
-        }
         self.fs = 44100
         self.duration = 2
 
     def get_fs(self):
         return self.fs
+
+    def set_fs(self, f):
+        self.fs = f
 
     def get_DTMF(self):
         return self.DTMF
@@ -29,17 +23,6 @@ class Signal:
 
     def set_duration(self, duration):
         self.duration = duration
-
-    def print_DTMF(self):
-        count = 1
-        for k in self.DTMF.keys():
-            print(f'{k}', end='')
-            if count == 4:
-                count = 1
-                print()
-            else:
-                count += 1
-                print(' ', end='')
 
     def generateSin(self, freq, amplitude, time, samplerate):
         n = samplerate*time
@@ -72,11 +55,3 @@ class Signal:
         taps = window.firwin(N, cutoff_hz/nyq_rate, window=('kaiser', beta))
         yFiltrado = window.lfilter(taps, 1.0, y)
         return yFiltrado
-
-    def LPF(self, signal, cutoff_hz, fs):
-        nyq_rate = fs/2
-        width = 5.0/nyq_rate
-        ripple_db = 60.0  # dB
-        N, beta = window.kaiserord(ripple_db, width)
-        taps = window.firwin(N, cutoff_hz/nyq_rate, window=('kaiser', beta))
-        return(window.lfilter(taps, 1.0, signal))

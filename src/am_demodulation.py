@@ -3,20 +3,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sounddevice as sd
 import soundfile as sf
-import math
 
 
 audio, samplerate = sf.read("audios/modulado.wav")
 
 s = Signal()
+s.set_fs(samplerate)
 fs = s.get_fs()
 T = s.get_duration()
 fp = 14e3
-sd.default.samplerate = samplerate
+sd.default.samplerate = fs
 sd.default.channels = 1
 
 samples = len(audio)
-t = np.linspace(0, samples/samplerate, samples)
+t = np.linspace(0, samples/fs, samples)
 portadora = np.cos(2*np.pi*fp*t)
 
 demodulado = audio*portadora
@@ -29,13 +29,11 @@ plt.title('Sinal Demodulado')
 
 s.plotFFT(demodulado, title='FFT Demodulado')
 
-filtrado = s.filtro(demodulado, samplerate, 4000)
+filtrado = s.filtro(demodulado, fs, 4000)
 
-max_val = max(filtrado)
-norm_audio = [s/max_val for s in filtrado]
+s.plotFFT(filtrado, title='FFT Demodulado e Filtrado')
 
-sd.play(norm_audio, fs)
+sd.play(filtrado, fs)
 sd.wait()
-
 
 plt.show()
