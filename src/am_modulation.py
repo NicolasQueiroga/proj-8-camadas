@@ -45,7 +45,7 @@ s.plotFFT(filtrado, title='FFT filtrado')
 sd.play(filtrado)
 sd.wait()
 
-modulado = filtrado*portadora
+modulado = (filtrado)*portadora
 
 plt.figure('Sinal Modulado')
 plt.plot(t, modulado)

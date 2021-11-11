@@ -29,7 +29,9 @@ plt.title('Sinal Demodulado')
 
 s.plotFFT(demodulado, title='FFT Demodulado')
 
-filtrado = s.filtro(demodulado, fs, 10000)
+filtrado = s.filtro(demodulado, fs, 4000)
+
+s.plotFFT(filtrado, title='FFT Demodulado e Filtrado')
 
 sd.play(filtrado, fs)
 sd.wait()
